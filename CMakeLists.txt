@@ -18,6 +18,12 @@ if(POLICY CMP0091)
   cmake_policy(SET CMP0091 NEW)
 endif()
 
+include("cmake/HunterGate.cmake")
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/b626a6158599ed58db9e02763d2a815adbae5478.tar.gz"
+    SHA1 b3be07c82d4fdadb2ebb81c235a007758a970444
+)
+
 project(opentelemetry-cpp)
 
 # Mark variables as used so cmake doesn't complain about them
@@ -174,7 +180,7 @@ set(WITH_STL
 option(WITH_GSL
        "Whether to use Guidelines Support Library for C++ latest features" OFF)
 
-option(WITH_ABSEIL "Whether to use Abseil for C++latest features" OFF)
+option(WITH_ABSEIL "Whether to use Abseil for C++latest features" ON)
 
 set(OPENTELEMETRY_INSTALL_default ON)
 if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -218,7 +224,7 @@ option(WITH_OTLP_GRPC "Whether to include the OTLP gRPC exporter in the SDK"
        OFF)
 
 option(WITH_OTLP_HTTP "Whether to include the OTLP http exporter in the SDK"
-       OFF)
+       ON)
 
 option(WITH_OTLP_FILE "Whether to include the OTLP file exporter in the SDK"
        OFF)
@@ -226,7 +232,7 @@ option(WITH_OTLP_FILE "Whether to include the OTLP file exporter in the SDK"
 option(
   WITH_OTLP_HTTP_COMPRESSION
   "Whether to include gzip compression for the OTLP http exporter in the SDK"
-  OFF)
+  ON)
 
 option(WITH_ZIPKIN "Whether to include the Zipkin exporter in the SDK" OFF)
 
@@ -381,6 +387,7 @@ endif()
 
 if(WITH_ABSEIL)
   if(NOT TARGET absl::strings)
+    hunter_add_package(abseil)
     find_package(absl CONFIG REQUIRED)
   endif()
 endif()
@@ -388,6 +395,7 @@ endif()
 if(WITH_OTLP_GRPC
    OR WITH_OTLP_HTTP
    OR WITH_OTLP_FILE)
+  hunter_add_package(Protobuf)
   find_package(Protobuf)
   if(Protobuf_VERSION AND Protobuf_VERSION VERSION_GREATER_EQUAL "3.22.0")
     if(NOT WITH_ABSEIL)
@@ -414,6 +422,7 @@ if(WITH_OTLP_GRPC
     endif()
 
     if(NOT Protobuf_FOUND AND NOT PROTOBUF_FOUND)
+      hunter_add_package(Protobuf)
       find_package(Protobuf REQUIRED)
     endif()
     if(NOT gRPC_FOUND AND WITH_OTLP_GRPC)
@@ -467,6 +476,7 @@ endif()
 
 if((NOT WITH_API_ONLY) AND WITH_HTTP_CLIENT_CURL)
   # No specific version required.
+  hunter_add_package(CURL)
   find_package(CURL REQUIRED)
   message(STATUS "Found CURL: ${CURL_LIBRARIES}, version ${CURL_VERSION}")
 endif()
@@ -479,6 +489,7 @@ if((NOT WITH_API_ONLY)
    AND WITH_HTTP_CLIENT_CURL
    AND WITH_OTLP_HTTP_COMPRESSION)
   # No specific version required.
+  hunter_add_package(ZLIB)
   find_package(ZLIB REQUIRED)
   message(STATUS "Found ZLIB: ${ZLIB_LIBRARIES}, version ${ZLIB_VERSION}")
 endif()
@@ -610,6 +621,7 @@ if(BUILD_TESTING)
     endif()
   elseif(WIN32)
     # Make sure we are always bootsrapped with vcpkg on Windows
+    hunter_add_package(GTest)
     find_package(GTest)
     if(NOT (GTEST_FOUND OR GTest_FOUND))
       if(DEFINED CMAKE_TOOLCHAIN_FILE)
@@ -620,11 +632,13 @@ if(BUILD_TESTING)
       else()
         install_windows_deps()
         include(${CMAKE_TOOLCHAIN_FILE})
+	hunter_add_package(GTest)
         find_package(GTest REQUIRED)
       endif()
     endif()
   else()
     # Prefer GTest installed by OS distro, brew or vcpkg package manager
+    hunter_add_package(GTest)
     find_package(GTest REQUIRED)
   endif()
   if(NOT GTEST_BOTH_LIBRARIES)
@@ -643,6 +657,7 @@ if(BUILD_TESTING)
   enable_testing()
   if(WITH_BENCHMARK)
     # Benchmark respects the CMAKE_PREFIX_PATH
+    hunter_add_package(benchmark)
     find_package(benchmark CONFIG REQUIRED)
   endif()
 endif()
