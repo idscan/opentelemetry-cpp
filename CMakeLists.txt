@@ -16,6 +16,12 @@ set(OPENTELEMETRY_VERSION
 
 set(OPENTELEMETRY_ABI_VERSION_DEFAULT "1")
 
+include("cmake/HunterGate.cmake")
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/b626a6158599ed58db9e02763d2a815adbae5478.tar.gz"
+    SHA1 b3be07c82d4fdadb2ebb81c235a007758a970444
+)
+
 project(
   opentelemetry-cpp
   VERSION "${OPENTELEMETRY_VERSION_NUMBER}"
@@ -143,7 +149,7 @@ option(WITH_OTLP_GRPC "Whether to include the OTLP gRPC exporter in the SDK"
        OFF)
 
 option(WITH_OTLP_HTTP "Whether to include the OTLP http exporter in the SDK"
-       OFF)
+       ON)
 
 option(WITH_OTLP_FILE "Whether to include the OTLP file exporter in the SDK"
        OFF)
@@ -151,7 +157,7 @@ option(WITH_OTLP_FILE "Whether to include the OTLP file exporter in the SDK"
 option(
   WITH_OTLP_HTTP_COMPRESSION
   "Whether to include gzip compression for the OTLP http exporter in the SDK"
-  OFF)
+  ON)
 
 option(
   WITH_OTLP_UTF8_VALIDITY

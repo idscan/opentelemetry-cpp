@@ -6,6 +6,7 @@
 # 2. Use FetchContent to build benchmark from a git submodule
 # 3. Use FetchContent to fetch and build benchmark from GitHub
 
+hunter_add_package(benchmark)
 find_package(benchmark CONFIG QUIET)
 set(benchmark_PROVIDER "find_package")
 

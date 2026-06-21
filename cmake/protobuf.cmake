@@ -25,6 +25,7 @@ else()
   # Search for an installed Protobuf package explicitly using the CONFIG search mode first followed by the MODULE search mode.
   # Protobuf versions < 3.22.0 may be found using the module mode and some protobuf apt packages do not support the CONFIG search.
 
+  hunter_add_package(Protobuf)
   find_package(Protobuf CONFIG QUIET)
   set(Protobuf_PROVIDER "find_package")
 

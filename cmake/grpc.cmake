@@ -10,6 +10,7 @@
 # https://github.com/grpc/grpc/pull/33361 for more details.
 include(CMakeFindDependencyMacro)
 
+hunter_add_package(gRPC)
 find_package(gRPC CONFIG QUIET)
 set(gRPC_PROVIDER "find_package")
 

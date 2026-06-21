@@ -6,6 +6,7 @@
 # 2. Use FetchContent to build nlohmann-json from a git submodule
 # 3. Use FetchContent to fetch and build nlohmann-json from GitHub
 
+hunter_add_package(nlohmann_json)
 find_package(nlohmann_json CONFIG QUIET)
 set(nlohmann_json_PROVIDER "find_package")
 

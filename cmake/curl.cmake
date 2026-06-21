@@ -6,6 +6,7 @@
 # 2. Use FetchContent to fetch and build curl from GitHub
 
 # Find the curl package with the default search mode
+hunter_add_package(CURL)
 find_package(CURL QUIET)
 set(CURL_PROVIDER "find_package")
 

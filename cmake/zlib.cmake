@@ -6,6 +6,7 @@
 # Protobuf, gRPC, prometheus-cpp, civetweb, CURL, and other dependencies require ZLIB and import its target.
 # When ZLIB::ZLIB is an alias of the shared library then inconsistent linking may occur.
 
+hunter_add_package(ZLIB)
 find_package(ZLIB REQUIRED)
 set(ZLIB_PROVIDER "find_package")
 

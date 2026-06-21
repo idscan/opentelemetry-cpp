@@ -6,6 +6,7 @@
 # 2. Use FetchContent to build prometheus-cpp from a git submodule
 # 3. Use FetchContent to fetch and build prometheus-cpp from GitHub
 
+hunter_add_package(prometheus-cpp)
 find_package(prometheus-cpp CONFIG QUIET)
 set(prometheus-cpp_PROVIDER "find_package")
 

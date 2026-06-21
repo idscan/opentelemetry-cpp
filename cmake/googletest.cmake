@@ -6,6 +6,7 @@
 # 2. Use FetchContent to build googletest from a git submodule
 # 3. Use FetchContent to fetch and build googletest from GitHub
 
+hunter_add_package(GTest)
 find_package(GTest CONFIG QUIET)
 set(GTest_PROVIDER "find_package")
 
@@ -47,4 +48,7 @@ endif()
 
 if(NOT GMOCK_LIB)
   set(GMOCK_LIB GTest::gmock)
+  if(TARGET GTest::gmock_main)
+    list(APPEND GMOCK_LIB GTest::gmock_main)
+  endif()
 endif()
