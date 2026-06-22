@@ -77,4 +77,5 @@ if(NOT TARGET CURL::libcurl)
 endif()
 
 if(NOT TARGET CURL::libcurl)
-  message(FATAL_E
+  message(FATAL_ERROR "The required curl target (CURL::libcurl) was not imported.")
+endif()
