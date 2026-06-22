@@ -7,7 +7,7 @@
 
 # Find the curl package with the default search mode
 hunter_add_package(CURL)
-find_package(CURL QUIET)
+find_package(CURL CONFIG REQUIRED)
 set(CURL_PROVIDER "find_package")
 
 if(NOT CURL_FOUND)
@@ -65,7 +65,11 @@ endif()
 
 # Add the main CURL::libcurl alias target if missing. Prefer the shared target followed by the static target
 if(NOT TARGET CURL::libcurl)
-  if(TARGET libcurl_shared)
+  if(TARGET CURL::libcurl_static)
+    add_library(CURL::libcurl ALIAS CURL::libcurl_static)
+  elseif(TARGET CURL::libcurl_shared)
+    add_library(CURL::libcurl ALIAS CURL::libcurl_shared)
+  elseif(TARGET libcurl_shared)
     add_library(CURL::libcurl ALIAS libcurl_shared)
   elseif(TARGET libcurl_static)
     add_library(CURL::libcurl ALIAS libcurl_static)
@@ -73,5 +77,4 @@ if(NOT TARGET CURL::libcurl)
 endif()
 
 if(NOT TARGET CURL::libcurl)
-  message(FATAL_ERROR "The required curl target (CURL::libcurl) was not imported.")
-endif()
+  message(FATAL_E
